@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Build a Survey Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0f0e17;
+      --surface: #1a1928;
+      --border: #2e2d45;
+      --accent: #e8c547;
+      --accent2: #ff6b6b;
+      --text: #fffffe;
+      --muted: #a7a9be;
+      --input-bg: #12111f;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(232,197,71,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 90%, rgba(255,107,107,0.06) 0%, transparent 50%);
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 640px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f0e17;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.75rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+
+    h1#title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    h1#title span { color: var(--accent); }
+
+    p#description {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.6;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    form#survey-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    label .req { color: var(--accent2); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.75rem 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    input[type="text"]::placeholder,
+    input[type="email"]::placeholder,
+    input[type="number"]::placeholder,
+    textarea::placeholder { color: #4a4860; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(232,197,71,0.12);
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a7a9be' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      cursor: pointer;
+    }
+
+    select option { background: var(--surface); }
+
+    textarea { resize: vertical; min-height: 100px; }
+
+    .radio-group, .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.25rem;
+    }
+
+    .radio-option, .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--input-bg);
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .radio-option:hover, .checkbox-option:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .radio-option input, .checkbox-option input {
+      width: auto;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .section-label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    button#submit {
+      background: var(--accent);
+      color: #0f0e17;
+      border: none;
+      border-radius: 8px;
+      padding: 0.9rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    button#submit:hover {
+      background: #f0d060;
+      box-shadow: 0 6px 24px rgba(232,197,71,0.25);
+      transform: translateY(-2px);
+    }
+
+    button#submit:active { transform: translateY(0); }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div class="tag">Survey</div>
+      <h1 id="title">Share Your <span>Thoughts</span></h1>
+      <p id="description">We'd love to hear from you. Fill out this quick survey to help us understand your experience and improve what we do.</p>
+    </div>
+
+    <form id="survey-form">
+
+      <div class="field">
+        <label for="name" id="name-label">Full Name <span class="req">*</span></label>
+        <input type="text" id="name" name="name" placeholder="e.g. Jane Dupont" required />
+      </div>
+
+      <div class="field">
+        <label for="email" id="email-label">Email Address <span class="req">*</span></label>
+        <input type="email" id="email" name="email" placeholder="e.g. jane@example.com" required />
+      </div>
+
+      <div class="field">
+        <label for="number" id="number-label">Age</label>
+        <input type="number" id="number" name="age" placeholder="Your age (10–120)" min="10" max="120" />
+      </div>
+
+      <hr class="divider"/>
+
+      <div class="field">
+        <label for="dropdown">How did you find us?</label>
+        <select id="dropdown" name="referral">
+          <option value="" disabled selected>Select an option…</option>
+          <option value="social">Social Media</option>
+          <option value="friend">Friend or Colleague</option>
+          <option value="search">Search Engine</option>
+          <option value="event">Event or Conference</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <p class="section-label">How would you rate your overall experience?</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="rating" value="excellent"/> Excellent</label>
+          <label class="radio-option"><input type="radio" name="rating" value="good"/> Good</label>
+          <label class="radio-option"><input type="radio" name="rating" value="average"/> Average</label>
+          <label class="radio-option"><input type="radio" name="rating" value="poor"/> Poor</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <p class="section-label">What topics interest you most?</p>
+        <div class="checkbox-group">
+          <label class="checkbox-option"><input type="checkbox" name="topics" value="design"/> Design &amp; Aesthetics</label>
+          <label class="checkbox-option"><input type="checkbox" name="topics" value="tech"/> Technology &amp; Dev</label>
+          <label class="checkbox-option"><input type="checkbox" name="topics" value="business"/> Business &amp; Strategy</label>
+          <label class="checkbox-option"><input type="checkbox" name="topics" value="wellbeing"/> Health &amp; Wellbeing</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="comments">Additional Comments</label>
+        <textarea id="comments" name="comments" placeholder="Any thoughts, suggestions, or feedback…"></textarea>
+      </div>
+
+      <button type="submit" id="submit">Submit Survey →</button>
+
+    </form>
+  </div>
+</body>
+</html>
